@@ -1,5 +1,11 @@
 # white_backgroundify
 
+---
+
+🚧 **This is a WIP!** 🚧
+
+---
+
 This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px by default (configurable in the script) and its height will be dependent on the mode selected.
 
 Example (images have been scaled down for demonstration purposes):
