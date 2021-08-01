@@ -1,6 +1,6 @@
 # white_backgroundify
 
-This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px and its height will be dependent on the mode selected.
+This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px by default (configurable in the script) and its height will be dependent on the mode selected.
 
 # Usage
 
@@ -28,23 +28,22 @@ Supported modes:
 # Notes
 
 * The output path of each image will be
-
   ```
   <input image's folder>/white_bg/<input image name>_white_bg.<input image extension>
   ```
-
   so it's more convenient to use on a single folder with a wildcard path (e.g. `*.jpg`) instead of individual images with separate paths. This is still possible, but you may end up with multiple  `white_bg/` folders if the provided images aren't in the same folder.
-
 * This has only been tested with JPGs. 
-
 * This hasn't been tested much.
 
 # Requirements
 
 * Python 3.7.5
+* [Pillow 8.3.1](https://pypi.org/project/Pillow/8.3.1/)
 
 # Future Considerations
 
-* Make width configurable
-* Make output image quality configurable
-* Make margin configurable
+* Make more options configurable through command line arguments:
+  * Width
+  * Image quality
+  * Margin
+* Support more crop formats and modes

@@ -23,7 +23,7 @@ paths: A space delimited list of file paths.
 """
 
 # Config. Change these if desired!
-MARGIN = 40
+MARGIN = 40 # TODO: make margin be a percentage instead of constant?
 OUTPUT_WIDTH = 2160
 OUTPUT_QUALITY = 95
 
