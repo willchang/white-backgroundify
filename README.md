@@ -2,6 +2,11 @@
 
 This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px by default (configurable in the script) and its height will be dependent on the mode selected.
 
+Example (images have been scaled down for demonstration purposes):
+
+[Before](images/shadows.jpg)
+[After](image/white_bg/shadows_white_bg.jpg)
+
 # Usage
 
 Given a folder `some/folder/with/images` with the following contents:
