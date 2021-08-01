@@ -10,8 +10,8 @@ from PIL import Image
 # Modes
 MODE_SQUARE = "square"
 MODE_4x5 = "4x5"
-MODE_1080x1920 = "1080x1920"
-modes = [MODE_SQUARE, MODE_4x5, MODE_1080x1920]
+MODE_9x16 = "9x16"
+modes = [MODE_SQUARE, MODE_4x5, MODE_9x16]
 
 # Usage
 usage_str = f"""
@@ -34,7 +34,7 @@ MARGIN = math.floor(OUTPUT_WIDTH * 0.042) # Equivalent to a 1/4" border on a 4x6
 OUTPUT_HEIGHT = 0 # Give the output height a default, will be set later depending on mode
 OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
 OUTPUT_HEIGHT_4x5 = math.floor(OUTPUT_WIDTH / (4/5))
-OUTPUT_HEIGHT_1080x1920 = math.floor(OUTPUT_WIDTH / (1080/1920))
+OUTPUT_HEIGHT_9x16 = math.floor(OUTPUT_WIDTH / (1080/1920))
 
 # Validate inputs
 command = sys.argv[1]
@@ -61,8 +61,8 @@ if mode == MODE_SQUARE:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_SQUARE
 elif mode == MODE_4x5:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_4x5
-elif mode == MODE_1080x1920:
-    OUTPUT_HEIGHT = OUTPUT_HEIGHT_1080x1920
+elif mode == MODE_9x16:
+    OUTPUT_HEIGHT = OUTPUT_HEIGHT_9x16
 else:
     raise Exception("There was a problem configuring output height based on mode.")
 

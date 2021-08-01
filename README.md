@@ -32,6 +32,7 @@ Created some/folder/with/images/white_bg/my_image_3_white_bg.jpg
 Supported modes:
 * `square`: The output image will be square.
 * `4x5`: The output image will be 4x5.
+* `9x16`: The output image will be 9x16.
 
 # Notes
 
