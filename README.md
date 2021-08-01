@@ -4,8 +4,8 @@ This script takes input images and pastes them onto a new image with a white bac
 
 Example (images have been scaled down for demonstration purposes):
 
-[Before](Images/shadows.jpg)
-[After](Image/white_bg/shadows_white_bg.jpg)
+![Before](Images/shadows.jpg)
+![After](Images/white_bg/shadows_white_bg.jpg)
 
 # Usage
 
