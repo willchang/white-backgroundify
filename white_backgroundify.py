@@ -5,6 +5,8 @@ import os
 import math
 from PIL import Image
 
+# TODO: Add adaptive option so non-square modes aren't strict (e.g. 4x5 can be 5x4, etc.)
+
 # Modes
 MODE_SQUARE = "square"
 MODE_4x5 = "4x5"

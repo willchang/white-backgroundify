@@ -4,13 +4,11 @@ This script takes input images and pastes them onto a new image with a white bac
 
 Example (images have been scaled down for demonstration purposes):
 
-Before:
+#### Input Image
+![Input image](Images/shadows.jpg)
 
-![Before](Images/shadows.jpg)
-
-After:
-
-![After](Images/white_bg/shadows_white_bg.jpg)
+#### Output Image (using `square` mode)
+![Output image](Images/white_bg/shadows_white_bg.jpg)
 
 # Usage
 
