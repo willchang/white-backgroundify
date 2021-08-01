@@ -37,9 +37,9 @@ my_image_3.jpg
 Use `white_backgroundify.py` like this:
 ```
 ➜ ./white_backgroundify.py --mode=4x5 some/folder/with/images/*.jpg
-Created some/folder/with/images/white_bg/my_image_1_white_bg.jpg
-Created some/folder/with/images/white_bg/my_image_2_white_bg.jpg
-Created some/folder/with/images/white_bg/my_image_3_white_bg.jpg
+Created some/folder/with/images/white_bg/4x5/my_image_1_white_bg.jpg
+Created some/folder/with/images/white_bg/4x5/my_image_2_white_bg.jpg
+Created some/folder/with/images/white_bg/4x5/my_image_3_white_bg.jpg
 ```
 
 # Modes
@@ -53,7 +53,7 @@ Supported modes:
 
 * The output path of each image will be
   ```
-  <input image's folder>/white_bg/<input image name>_white_bg.<input image extension>
+  <input image's folder>/white_bg/<mode>/<input image name>_white_bg.<input image extension>
   ```
   so it's more convenient to use on a single folder with a wildcard path (e.g. `*.jpg`) instead of individual images with separate paths. This is still possible, but you may end up with multiple  `white_bg/` folders if the provided images aren't in the same folder.
 * This has only been tested with JPGs. 

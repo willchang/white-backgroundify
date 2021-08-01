@@ -89,9 +89,9 @@ for path in paths:
         if dir_name == "":
             dir_name = "."
 
-        white_bg_dir = f'{dir_name}/white_bg'
-        if not os.path.isdir(white_bg_dir):
-            os.mkdir(white_bg_dir)
+        output_dir = f'{dir_name}/white_bg/{mode}'
+        if not os.path.isdir(output_dir):
+            os.makedirs(output_dir)
 
         # Create new image with a white background
         new_image = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
@@ -113,7 +113,7 @@ for path in paths:
         new_image.paste(resized_image, box)
 
         # Save
-        new_image_path = f'{white_bg_dir}/{image_name}_white_bg.{file_extension}'
+        new_image_path = f'{output_dir}/{image_name}_white_bg.{file_extension}'
         new_image.save(new_image_path, 
             quality=OUTPUT_QUALITY, 
             icc_profile=image.info['icc_profile'],
