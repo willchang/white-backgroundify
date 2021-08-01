@@ -79,15 +79,18 @@ for path in paths:
         file_extension = filename_splitted[1]
 
         # Create output dir
+        if dir_name == "":
+            dir_name = "."
+            
         white_bg_dir = f'{dir_name}/white_bg'
         if not os.path.isdir(white_bg_dir):
             os.mkdir(white_bg_dir)
 
-        # Create new image
+        # Create new image with a white background
         new_im = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
 
         # Resize original image
-        image_ratio = width/height
+        image_ratio = width / height
         new_width = 0
         new_height = 0
 
@@ -100,13 +103,17 @@ for path in paths:
 
         resized_im = im.resize((new_width, new_height)) 
 
-        # Paste resized image onto new image
-        box = (math.floor((OUTPUT_WIDTH - new_width) / 2.0), math.floor((OUTPUT_HEIGHT - new_height) / 2.0))
+        # Paste resized image onto new image, centered
+        box = (math.floor((OUTPUT_WIDTH - new_width) / 2.0), 
+            math.floor((OUTPUT_HEIGHT - new_height) / 2.0))
         new_im.paste(resized_im, box)
 
         # Save
         new_path_path = f'{white_bg_dir}/{image_name}_white_bg.{file_extension}'
-        new_im.save(new_path_path, quality=OUTPUT_QUALITY)
+        new_im.save(new_path_path, 
+            quality=OUTPUT_QUALITY, 
+            icc_profile=im.info['icc_profile'],
+            exif=im.info['exif'])
 
         print(f'Created {new_path_path}')
     except Exception as e:
