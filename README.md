@@ -41,3 +41,4 @@ Created some/folder/with/images/white_bg/my_image_3_white_bg.jpg
 
 * Make width configurable
 * Make output image quality configurable
+* Make margin configurable
