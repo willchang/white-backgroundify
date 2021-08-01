@@ -22,17 +22,19 @@ paths: A space delimited list of file paths.
 ------------------
 """
 
+# Config. Change these if desired!
+MARGIN = 40
+OUTPUT_WIDTH = 2160
+OUTPUT_QUALITY = 95
+
+# Constants. DON'T change these!
+OUTPUT_HEIGHT = 0 # Give the output height a default, will be set later depending on mode
+OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
+OUTPUT_HEIGHT_4x5 = math.floor(OUTPUT_WIDTH / (4/5))
+
 # Input
 command = sys.argv[1]
 paths = sys.argv[2:]
-
-# Constants
-MARGIN = 40
-OUTPUT_WIDTH = 2160
-OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
-OUTPUT_HEIGHT_4x5 = 2700
-OUTPUT_HEIGHT = 0 # Give the output height a default
-OUTPUT_QUALITY = 95
 
 # Validate inputs
 if command == "--help":
@@ -51,7 +53,7 @@ if len(paths) == 0:
     print(f"Error: please provide a list of paths.\n{usage_str}")
     sys.exit(1)
 
-# Configuration
+# Height configuration
 if mode == MODE_SQUARE:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_SQUARE
 elif mode == MODE_4x5:
