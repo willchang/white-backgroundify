@@ -16,6 +16,16 @@ Example (images have been scaled down for demonstration purposes):
 #### Output Image (using `square` mode)
 ![Output image](Images/white_bg/shadows_white_bg.jpg)
 
+# Installation
+
+1. Install the [Requirements](#requirements) below.
+2. Clone this repo or download the script itself.
+3. (Optional but recommended) Create a symlink for convenience:
+```
+➜ cd /usr/local/bin
+➜ ln -s path/to/white_backgroundify.py white_backgroundify
+```
+
 # Usage
 
 Given a folder `some/folder/with/images` with the following contents:
@@ -30,7 +40,6 @@ Use `white_backgroundify.py` like this:
 Created some/folder/with/images/white_bg/my_image_1_white_bg.jpg
 Created some/folder/with/images/white_bg/my_image_2_white_bg.jpg
 Created some/folder/with/images/white_bg/my_image_3_white_bg.jpg
-
 ```
 
 # Modes
