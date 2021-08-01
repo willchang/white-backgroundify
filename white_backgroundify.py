@@ -5,12 +5,26 @@ import os
 import math
 from PIL import Image
 
-mode = sys.argv[1]
-paths = sys.argv[2:]
-
 # Modes
 MODE_SQUARE = "square"
 MODE_4x5 = "4x5"
+modes = [MODE_SQUARE, MODE_4x5]
+
+# Usage
+usage_str = f"""
+------------------
+This script takes input images and pastes them onto a white background.
+
+Usage: --mode=<mode> <space delimited paths>
+
+--mode: One of {modes}. The output file will be this format.
+paths: A space delimited list of file paths.
+------------------
+"""
+
+# Input
+command = sys.argv[1]
+paths = sys.argv[2:]
 
 # Constants
 MARGIN = 40
@@ -18,31 +32,26 @@ OUTPUT_WIDTH = 2160
 OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
 OUTPUT_HEIGHT_4x5 = 2700
 OUTPUT_HEIGHT = 0 # Give the output height a default
-
-# Usage
-usage_str = f"""
-------------------
-This script takes input images and pastes them onto a white background.
-
-Usage: {sys.argv[0]} <mode> <paths>
-
-mode: One of {MODE_SQUARE}|{MODE_4x5}. The output file will be this format.
-paths: A list of file paths.
-------------------
-"""
+OUTPUT_QUALITY = 95
 
 # Validate inputs
-if not mode == MODE_SQUARE and not mode == MODE_4x5:
-    print(f"Error: first argument should be a mode.\n{usage_str}")
-    sys.exit(1)
+if command == "--help":
+    print(usage_str)
+    sys.exit(0)
+elif command[:7] == "--mode=":
+    mode = command[7:]
+
+    if not mode in modes:
+        print(f"Error: Unrecognized mode.\n{usage_str}")
+        sys.exit(1)
+else:
+    raise Exception("Unrecognized command.")
 
 if len(paths) == 0:
     print(f"Error: please provide a list of paths.\n{usage_str}")
     sys.exit(1)
 
 # Configuration
-skipped_paths = []
-
 if mode == MODE_SQUARE:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_SQUARE
 elif mode == MODE_4x5:
@@ -50,7 +59,12 @@ elif mode == MODE_4x5:
 else:
     raise Exception("There was a problem configuring output height based on mode.")
 
+if OUTPUT_HEIGHT == 0:
+    raise Exception("There was a problem configuring output height.")
+
 # Process images
+skipped_paths = []
+
 for path in paths:
     try:
         # Open image and gather required data
@@ -65,9 +79,9 @@ for path in paths:
         file_extension = filename_splitted[1]
 
         # Create output dir
-        automated_dir = f'{dir_name}/Automated'
-        if not os.path.isdir(automated_dir):
-            os.mkdir(automated_dir)
+        white_bg_dir = f'{dir_name}/white_bg'
+        if not os.path.isdir(white_bg_dir):
+            os.mkdir(white_bg_dir)
 
         # Create new image
         new_im = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
@@ -91,8 +105,8 @@ for path in paths:
         new_im.paste(resized_im, box)
 
         # Save
-        new_path_path = f'{automated_dir}/{image_name}_white_bg.{file_extension}'
-        new_im.save(new_path_path, quality=95)
+        new_path_path = f'{white_bg_dir}/{image_name}_white_bg.{file_extension}'
+        new_im.save(new_path_path, quality=OUTPUT_QUALITY)
 
         print(f'Created {new_path_path}')
     except Exception as e:
