@@ -19,6 +19,12 @@ Created some/folder/with/images/white_bg/my_image_3_white_bg.jpg
 
 ```
 
+# Modes
+
+Supported modes:
+* `square`: The output image will be square.
+* `4x5`: The output image will be 4x5.
+
 # Notes
 
 * The output path of each image will be
