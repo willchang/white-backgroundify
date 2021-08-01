@@ -68,26 +68,26 @@ skipped_paths = []
 for path in paths:
     try:
         # Open image and gather required data
-        im = Image.open(path)
-        width = im.size[0]
-        height = im.size[1]
-        dir_name = os.path.dirname(path)
-        path_splitted = os.path.split(path)
-        filename = path_splitted[1]
-        filename_splitted = filename.split(".")
-        image_name = filename_splitted[0]
-        file_extension = filename_splitted[1]
+        image = Image.open(path)
+        width, height = image.size[0], image.size[1]
+
+        # Path info
+        path_components = os.path.split(path) # Split into directory + filename
+        filename = path_components[1]
+        filename_components = filename.split(".") # Split into filename + extension
+        image_name, file_extension = filename_components[0], filename_components[1]
 
         # Create output dir
+        dir_name = os.path.dirname(path)
         if dir_name == "":
             dir_name = "."
-            
+
         white_bg_dir = f'{dir_name}/white_bg'
         if not os.path.isdir(white_bg_dir):
             os.mkdir(white_bg_dir)
 
         # Create new image with a white background
-        new_im = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
+        new_image = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
 
         # Resize original image
         image_ratio = width / height
@@ -101,21 +101,21 @@ for path in paths:
             new_height = OUTPUT_HEIGHT - MARGIN
             new_width = math.floor(new_height * image_ratio)
 
-        resized_im = im.resize((new_width, new_height)) 
+        resized_image = image.resize((new_width, new_height)) 
 
         # Paste resized image onto new image, centered
         box = (math.floor((OUTPUT_WIDTH - new_width) / 2.0), 
             math.floor((OUTPUT_HEIGHT - new_height) / 2.0))
-        new_im.paste(resized_im, box)
+        new_image.paste(resized_image, box)
 
         # Save
-        new_path_path = f'{white_bg_dir}/{image_name}_white_bg.{file_extension}'
-        new_im.save(new_path_path, 
+        new_image_path = f'{white_bg_dir}/{image_name}_white_bg.{file_extension}'
+        new_image.save(new_image_path, 
             quality=OUTPUT_QUALITY, 
-            icc_profile=im.info['icc_profile'],
-            exif=im.info['exif'])
+            icc_profile=image.info['icc_profile'],
+            exif=image.info['exif'])
 
-        print(f'Created {new_path_path}')
+        print(f'Created {new_image_path}')
     except Exception as e:
         skipped_paths.append(path)
         print(f'Skipping {path}: {e}')
