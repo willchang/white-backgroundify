@@ -23,9 +23,9 @@ paths: A space delimited list of file paths.
 """
 
 # Config. Change these if desired!
-MARGIN = 40 # TODO: make margin be a percentage instead of constant?
 OUTPUT_WIDTH = 2160
 OUTPUT_QUALITY = 95
+MARGIN = math.floor(OUTPUT_WIDTH * 0.042) # Equivalent to a 1/4" border on a 4x6
 
 # Constants. DON'T change these!
 OUTPUT_HEIGHT = 0 # Give the output height a default, will be set later depending on mode
@@ -115,7 +115,9 @@ for path in paths:
         new_image.save(new_image_path, 
             quality=OUTPUT_QUALITY, 
             icc_profile=image.info['icc_profile'],
-            exif=image.info['exif'])
+            exif=image.info['exif'],
+            dpi=(300,300),
+            optimize=True)
 
         print(f'Created {new_image_path}')
     except Exception as e:
