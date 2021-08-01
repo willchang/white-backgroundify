@@ -48,6 +48,10 @@ Supported modes:
 * Python 3.7.5
 * [Pillow 8.3.1](https://pypi.org/project/Pillow/8.3.1/)
 
+# Why Should You Use This?
+
+Use this if you don't want to faff around with a photo editor's automate/batch function.
+
 # Future Considerations
 
 * Make more options configurable through command line arguments:
@@ -55,3 +59,4 @@ Supported modes:
   * Image quality
   * Margin
 * Support more crop formats and modes
+* Make modes adaptable (e.g. make 4x5 work with 5x4) – ideal for print
