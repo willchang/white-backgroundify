@@ -10,7 +10,8 @@ from PIL import Image
 # Modes
 MODE_SQUARE = "square"
 MODE_4x5 = "4x5"
-modes = [MODE_SQUARE, MODE_4x5]
+MODE_1080x1920 = "1080x1920"
+modes = [MODE_SQUARE, MODE_4x5, MODE_1080x1920]
 
 # Usage
 usage_str = f"""
@@ -33,12 +34,12 @@ MARGIN = math.floor(OUTPUT_WIDTH * 0.042) # Equivalent to a 1/4" border on a 4x6
 OUTPUT_HEIGHT = 0 # Give the output height a default, will be set later depending on mode
 OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
 OUTPUT_HEIGHT_4x5 = math.floor(OUTPUT_WIDTH / (4/5))
+OUTPUT_HEIGHT_1080x1920 = math.floor(OUTPUT_WIDTH / (1080/1920))
 
-# Input
+# Validate inputs
 command = sys.argv[1]
 paths = sys.argv[2:]
 
-# Validate inputs
 if command == "--help":
     print(usage_str)
     sys.exit(0)
@@ -60,6 +61,8 @@ if mode == MODE_SQUARE:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_SQUARE
 elif mode == MODE_4x5:
     OUTPUT_HEIGHT = OUTPUT_HEIGHT_4x5
+elif mode == MODE_1080x1920:
+    OUTPUT_HEIGHT = OUTPUT_HEIGHT_1080x1920
 else:
     raise Exception("There was a problem configuring output height based on mode.")
 
@@ -95,13 +98,10 @@ for path in paths:
 
         # Resize original image
         image_ratio = width / height
-        new_width = 0
-        new_height = 0
+        new_width = OUTPUT_WIDTH - MARGIN
+        new_height = math.floor(new_width / image_ratio)
 
-        if width > height:
-            new_width = OUTPUT_WIDTH - MARGIN
-            new_height = math.floor(new_width / image_ratio)
-        else:
+        if new_height > OUTPUT_HEIGHT:
             new_height = OUTPUT_HEIGHT - MARGIN
             new_width = math.floor(new_height * image_ratio)
 
