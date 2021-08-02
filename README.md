@@ -6,14 +6,14 @@
 
 ---
 
-This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px by default (configurable in the script) and its height will be dependent on the mode selected.
+This script takes input images and pastes them onto a new image with a white background. The new image's width will be `2160`px by default (configurable via a script argument) and its height will be dependent on the format provided.
 
 Example (images have been scaled down for demonstration purposes):
 
 #### Input Image
 ![Input image](Images/shadows.jpg)
 
-#### Output Image (using `square` mode)
+#### Output Image (using `1x1` format)
 ![Output image](Images/white_bg/shadows_white_bg.jpg)
 
 # Installation
@@ -36,18 +36,17 @@ my_image_3.jpg
 ```
 Use `white_backgroundify.py` like this:
 ```
-➜ ./white_backgroundify.py --mode=4x5 some/folder/with/images/*.jpg
+➜ ./white_backgroundify.py --format=4x5 --width=1000 some/folder/with/images/*.jpg
 Created some/folder/with/images/white_bg/4x5/my_image_1_white_bg.jpg
 Created some/folder/with/images/white_bg/4x5/my_image_2_white_bg.jpg
 Created some/folder/with/images/white_bg/4x5/my_image_3_white_bg.jpg
 ```
 
-# Modes
+# Arguments
 
-Supported modes:
-* `square`: The output image will be square.
-* `4x5`: The output image will be 4x5.
-* `9x16`: The output image will be 9x16.
+* `--help`: Shows a help doc.
+* **(Required)** `--format`: The desired crop of the output file (e.g. `2x3`, `4x5`, `1x1`, etc.)
+* (Optional) `--width`: The desired width of the output file.
 
 # Notes
 
@@ -71,8 +70,6 @@ Use this if you don't want to faff around with a photo editor's automate/batch f
 # Future Considerations
 
 * Make more options configurable through command line arguments:
-  * Width
   * Image quality
   * Margin
-* Support more crop formats and modes
-* Make modes adaptable (e.g. make 4x5 work with 5x4) – ideal for print
+* Make crop formats adaptable (e.g. make 4x5 work with 5x4) – ideal for print

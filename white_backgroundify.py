@@ -20,13 +20,14 @@ paths: A space delimited list of file paths.
 """
 
 # Config. Change these if desired!
-OUTPUT_WIDTH = 2160
+OUTPUT_WIDTH = 2160 # Default
 OUTPUT_QUALITY = 95
 MARGIN = math.floor(OUTPUT_WIDTH * 0.042) # Equivalent to a 1/4" border on a 4x6
 
 # Options
 OPTION_HELP = "--help"
 OPTION_FORMAT = "--format"
+OPTION_WIDTH = "--width"
 OPTIONS = [OPTION_HELP, OPTION_FORMAT]
 
 args = sys.argv[1:]
@@ -39,10 +40,10 @@ while len(args) > 0:
     components = arg.split("=")
     option = components[0]
 
-    if option == "--help":
+    if option == OPTION_HELP:
         print(usage_str)
         sys.exit(0)
-    elif option == "--format":
+    elif option == OPTION_FORMAT:
         if len(components) < 2:
             print("Please provide a valid format.")
             sys.exit(1)
@@ -56,17 +57,28 @@ while len(args) > 0:
 
         try:
             format_width, format_height = float(format_components[0]), float(format_components[1])
+
+            if format_str == "" or format_width == 0 or format_height == 0:
+                print("Please provide a valid format.")
+                sys.exit(1)
         except Exception as e:
             print("Please provide a valid format.")
             sys.exit(1)
+    elif option == OPTION_WIDTH:
+        try:
+            OUTPUT_WIDTH = math.floor(float(components[1]))
+
+            if OUTPUT_WIDTH <= 0:
+                print("Please provide a valid width.")
+                sys.exit(1)
+        except Exception as e:
+            print("Please provide a valid width.")
+            sys.exit(1)
+        
     else:
         paths.append(arg)
 
     args = args[1:]
-
-if format_str == "" or format_width == 0 or format_height == 0:
-    print("Please provide a valid format.")
-    sys.exit(1)
 
 if len(paths) == 0:
     print("Please provide a list of paths.")
