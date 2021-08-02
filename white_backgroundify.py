@@ -5,22 +5,16 @@ import os
 import math
 from PIL import Image
 
-# TODO: Add adaptive option so non-square modes aren't strict (e.g. 4x5 can be 5x4, etc.)
-
-# Modes
-MODE_SQUARE = "square"
-MODE_4x5 = "4x5"
-MODE_9x16 = "9x16"
-modes = [MODE_SQUARE, MODE_4x5, MODE_9x16]
+# TODO: Add adaptive option so non-square formats aren't strict (e.g. 4x5 can be 5x4, etc.)
 
 # Usage
 usage_str = f"""
 ------------------
 This script takes input images and pastes them onto a white background.
 
-Usage: --mode=<mode> <space delimited paths>
+Usage: --format=<4x5|2x3|1x1|etc.> <space delimited paths>
 
---mode: One of {modes}. The output file will be this format.
+--format: A crop format in the form "4x5", "2x3", "1x1", etc.
 paths: A space delimited list of file paths.
 ------------------
 """
@@ -30,44 +24,53 @@ OUTPUT_WIDTH = 2160
 OUTPUT_QUALITY = 95
 MARGIN = math.floor(OUTPUT_WIDTH * 0.042) # Equivalent to a 1/4" border on a 4x6
 
-# Constants. DON'T change these!
-OUTPUT_HEIGHT = 0 # Give the output height a default, will be set later depending on mode
-OUTPUT_HEIGHT_SQUARE = OUTPUT_WIDTH
-OUTPUT_HEIGHT_4x5 = math.floor(OUTPUT_WIDTH / (4/5))
-OUTPUT_HEIGHT_9x16 = math.floor(OUTPUT_WIDTH / (1080/1920))
+# Options
+OPTION_HELP = "--help"
+OPTION_FORMAT = "--format"
+OPTIONS = [OPTION_HELP, OPTION_FORMAT]
 
-# Validate inputs
-command = sys.argv[1]
-paths = sys.argv[2:]
+args = sys.argv[1:]
+format_str = ""
+format_width, format_height = 0, 0
+paths = []
 
-if command == "--help":
-    print(usage_str)
-    sys.exit(0)
-elif command[:7] == "--mode=":
-    mode = command[7:]
+while len(args) > 0:
+    arg = args[0]
+    components = arg.split("=")
+    option = components[0]
 
-    if not mode in modes:
-        print(f"Error: Unrecognized mode.\n{usage_str}")
-        sys.exit(1)
-else:
-    raise Exception("Unrecognized command.")
+    if option == "--help":
+        print(usage_str)
+        sys.exit(0)
+    elif option == "--format":
+        if len(components) < 2:
+            print("Please provide a valid format.")
+            sys.exit(1)
 
-if len(paths) == 0:
-    print(f"Error: please provide a list of paths.\n{usage_str}")
+        format_str = components[1]
+        format_components = format_str.split('x')
+
+        if not len(format_components) == 2:
+            print("Please provide a valid format.")
+            sys.exit(1)
+
+        try:
+            format_width, format_height = float(format_components[0]), float(format_components[1])
+        except Exception as e:
+            print("Please provide a valid format.")
+            sys.exit(1)
+    else:
+        paths.append(arg)
+
+    args = args[1:]
+
+if format_str == "" or format_width == 0 or format_height == 0:
+    print("Please provide a valid format.")
     sys.exit(1)
 
-# Height configuration
-if mode == MODE_SQUARE:
-    OUTPUT_HEIGHT = OUTPUT_HEIGHT_SQUARE
-elif mode == MODE_4x5:
-    OUTPUT_HEIGHT = OUTPUT_HEIGHT_4x5
-elif mode == MODE_9x16:
-    OUTPUT_HEIGHT = OUTPUT_HEIGHT_9x16
-else:
-    raise Exception("There was a problem configuring output height based on mode.")
-
-if OUTPUT_HEIGHT == 0:
-    raise Exception("There was a problem configuring output height.")
+if len(paths) == 0:
+    print("Please provide a list of paths.")
+    sys.exit(1)
 
 # Process images
 skipped_paths = []
@@ -89,11 +92,12 @@ for path in paths:
         if dir_name == "":
             dir_name = "."
 
-        output_dir = f'{dir_name}/white_bg/{mode}'
+        output_dir = f'{dir_name}/white_bg/{format_str}'
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir)
 
         # Create new image with a white background
+        OUTPUT_HEIGHT = math.floor(OUTPUT_WIDTH / (format_width / format_height))
         new_image = Image.new("RGB", (OUTPUT_WIDTH, OUTPUT_HEIGHT), (255, 255, 255))
 
         # Resize original image
