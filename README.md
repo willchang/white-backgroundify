@@ -45,8 +45,8 @@ Created some/folder/with/images/white_bg/4x5/my_image_3_white_bg.jpg
 # Arguments
 
 * `--help`: Shows a help doc.
-* **(Required)** `--format`: The desired crop of the output file (e.g. `2x3`, `4x5`, `1x1`, etc.)
-* (Optional) `--width`: The desired width of the output file.
+* `--format` **(Required)**: The desired crop of the output file (e.g. `2x3`, `4x5`, `1x1`, etc.)
+* `--width`: The desired width of the output file.
 
 # Notes
 
