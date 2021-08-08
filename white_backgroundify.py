@@ -3,6 +3,7 @@
 import sys
 import os
 import math
+from multiprocessing.dummy import Pool as ThreadPool, Lock
 from PIL import Image
 
 # TODO: Add adaptive option so non-square formats aren't strict (e.g. 4x5 can be 5x4, etc.)
@@ -97,26 +98,11 @@ if len(paths) == 0:
 # Process images
 skipped_paths = []
 
-for path in paths:
+def process(path):
     try:
         # Open image and gather required data
         image = Image.open(path)
         width, height = image.size[0], image.size[1]
-
-        # Path info
-        path_components = os.path.split(path) # Split into directory + filename
-        filename = path_components[1]
-        filename_components = filename.split(".") # Split into filename + extension
-        image_name, file_extension = filename_components[0], filename_components[1]
-
-        # Create output dir
-        dir_name = os.path.dirname(path)
-        if dir_name == "":
-            dir_name = "."
-
-        output_dir = f'{dir_name}/white_bg/{format_str}'
-        if not os.path.isdir(output_dir):
-            os.makedirs(output_dir)
 
         # Create new image with a white background
         OUTPUT_HEIGHT = math.floor(OUTPUT_WIDTH / (format_width / format_height))
@@ -138,6 +124,27 @@ for path in paths:
             math.floor((OUTPUT_HEIGHT - new_height) / 2.0))
         new_image.paste(resized_image, box)
 
+        # Path info
+        path_components = os.path.split(path) # Split into directory + filename
+        filename = path_components[1]
+        filename_components = filename.split(".") # Split into filename + extension
+        image_name, file_extension = filename_components[0], filename_components[1]
+
+        # Create output dir
+        dir_name = os.path.dirname(path)
+        if dir_name == "":
+            dir_name = "."
+
+        output_dir = f'{dir_name}/white_bg/{format_str}'
+
+        l = Lock()
+        l.acquire()
+
+        if not os.path.isdir(output_dir):
+            os.makedirs(output_dir)
+
+        l.release()
+
         # Save
         new_image_path = f'{output_dir}/{image_name}_white_bg.{file_extension}'
         new_image.save(new_image_path, 
@@ -151,6 +158,11 @@ for path in paths:
     except Exception as e:
         skipped_paths.append(path)
         print(f'Skipping {path}: {e}')
+
+pool = ThreadPool(8)
+pool.map(process, paths)
+pool.close()
+pool.join()
 
 if len(skipped_paths) > 0:
     print(f'\nSkipped {len(skipped_paths)} path(s):\n' + '\n'.join(skipped_paths))
