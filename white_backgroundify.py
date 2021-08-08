@@ -16,6 +16,9 @@ This script takes input images and pastes them onto a white background.
 Usage: --format=<4x5|2x3|1x1|etc.> <space delimited paths>
 
 --format: A crop format in the form "4x5", "2x3", "1x1", etc.
+
+--width: The desired width of the output file (default is 2160).
+
 paths: A space delimited list of file paths.
 ------------------
 """
