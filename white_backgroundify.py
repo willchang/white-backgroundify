@@ -3,6 +3,7 @@
 import sys
 import os
 import math
+import time
 from multiprocessing.dummy import Pool, Lock
 from PIL import Image
 
@@ -161,13 +162,15 @@ def process(path):
         return path
 
 # Process images
+tick = time.perf_counter()
 pool = Pool(8)
 skipped_paths = pool.map(process, paths)
 filtered_skipped_paths = [path for path in skipped_paths if path is not None]
 pool.close()
 pool.join()
+tock = time.perf_counter()
 
 if len(filtered_skipped_paths) > 0:
     print(f'\nSkipped {len(filtered_skipped_paths)} path(s):\n' + '\n'.join(filtered_skipped_paths))
 
-print(f'\nProcessed {str(len(paths) - len(filtered_skipped_paths))}/{str(len(paths))} paths.')
+print(f'\nProcessed {str(len(paths) - len(filtered_skipped_paths))}/{str(len(paths))} paths. ({tock - tick:.2f}s)')
