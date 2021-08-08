@@ -3,7 +3,7 @@
 import sys
 import os
 import math
-from multiprocessing.dummy import Pool as ThreadPool, Lock
+from multiprocessing.dummy import Pool, Lock
 from PIL import Image
 
 # TODO: Add adaptive option so non-square formats aren't strict (e.g. 4x5 can be 5x4, etc.)
@@ -85,7 +85,6 @@ while len(args) > 0:
 
     args = args[1:]
 
-# Validate
 if not format_str or format_width == 0 or format_height == 0:
     print("Please provide a valid format.")
     sys.exit(1)
@@ -159,7 +158,7 @@ def process(path):
         return path
 
 # Process images
-pool = ThreadPool(8)
+pool = Pool(8)
 skipped_paths = pool.map(process, paths)
 filtered_skipped_paths = [path for path in skipped_paths if path is not None]
 pool.close()
