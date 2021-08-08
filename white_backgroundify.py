@@ -80,7 +80,6 @@ while len(args) > 0:
         except Exception as e:
             print("Please provide a valid width.")
             sys.exit(1)
-        
     else:
         paths.append(arg)
 
@@ -94,9 +93,6 @@ if not format_str or format_width == 0 or format_height == 0:
 if len(paths) == 0:
     print("Please provide a list of paths.")
     sys.exit(1)
-
-# Process images
-skipped_paths = []
 
 def process(path):
     try:
@@ -155,14 +151,21 @@ def process(path):
             optimize=True)
 
         print(f'Created {new_image_path}')
+
+        return None
     except Exception as e:
-        skipped_paths.append(path)
         print(f'Skipping {path}: {e}')
 
+        return path
+
+# Process images
 pool = ThreadPool(8)
-pool.map(process, paths)
+skipped_paths = pool.map(process, paths)
+filtered_skipped_paths = [path for path in skipped_paths if path is not None]
 pool.close()
 pool.join()
 
-if len(skipped_paths) > 0:
-    print(f'\nSkipped {len(skipped_paths)} path(s):\n' + '\n'.join(skipped_paths))
+if len(filtered_skipped_paths) > 0:
+    print(f'\nSkipped {len(filtered_skipped_paths)} path(s):\n' + '\n'.join(filtered_skipped_paths))
+
+print(f'\nProcessed {str(len(paths) - len(filtered_skipped_paths))}/{str(len(paths))} paths.')
