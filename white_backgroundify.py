@@ -20,22 +20,26 @@ Usage: --format=<4x5|2x3|1x1|etc.> <space delimited paths>
 
 --width: The desired width of the output file (default is 2160).
 
+--margin-ratio: The desired margin ratio as a percentage of the width (default is 0.02 which is 2%).
+
 paths: A space delimited list of file paths.
 ------------------
 """
 
 # Helpers
-def margin(width):
-    return math.floor(width * 0.042) # Equivalent to a 1/4" border on a 4x6
+def calculate_margin():
+    return math.floor(OUTPUT_WIDTH * MARGIN_RATIO)
 
 # Default config. Change these if desired!
-OUTPUT_WIDTH = 2160 # Default
+OUTPUT_WIDTH = 2160
 OUTPUT_QUALITY = 95
-MARGIN = margin(OUTPUT_WIDTH)
+MARGIN_RATIO = 0.02
+MARGIN = calculate_margin()
 
 # Options
 OPTION_HELP = "--help"
 OPTION_WIDTH = "--width"
+OPTION_MARGIN = "--margin-ratio"
 
 # Options: Format
 OPTION_FORMAT = "--format"
@@ -76,13 +80,20 @@ while len(args) > 0:
     elif option_name == OPTION_WIDTH:
         try:
             OUTPUT_WIDTH = math.floor(float(arg_components[1]))
-            MARGIN = margin(OUTPUT_WIDTH)
+            MARGIN = calculate_margin()
 
             if OUTPUT_WIDTH <= 0:
                 print("Please provide a valid width.")
                 sys.exit(1)
         except Exception as e:
             print("Please provide a valid width.")
+            sys.exit(1)
+    elif option_name == OPTION_MARGIN:
+        try:
+            MARGIN_RATIO = float(arg_components[1])
+            MARGIN = calculate_margin()
+        except Exception as e:
+            print("Please provide a valid margin ratio (should be in the form '0.02' for example.)")
             sys.exit(1)
     else:
         paths.append(arg)
