@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 
 import sys
 import os
@@ -63,6 +63,7 @@ while len(args) > 0:
     elif option_name == OPTION_FORMAT:
         if not option_value:
             print("Please provide a valid format.")
+            print(usage_str)
             sys.exit(1)
 
         format_str = option_value
@@ -70,12 +71,14 @@ while len(args) > 0:
 
         if not len(format_components) == 2:
             print("Please provide a valid format.")
+            print(usage_str)
             sys.exit(1)
 
         try:
             format_width, format_height = float(format_components[0]), float(format_components[1])
         except Exception as e:
             print("Please provide a valid format.")
+            print(usage_str)
             sys.exit(1)
     elif option_name == OPTION_WIDTH:
         try:
@@ -84,9 +87,11 @@ while len(args) > 0:
 
             if OUTPUT_WIDTH <= 0:
                 print("Please provide a valid width.")
+                print(usage_str)
                 sys.exit(1)
         except Exception as e:
             print("Please provide a valid width.")
+            print(usage_str)
             sys.exit(1)
     elif option_name == OPTION_MARGIN:
         try:
@@ -94,6 +99,7 @@ while len(args) > 0:
             MARGIN = calculate_margin()
         except Exception as e:
             print("Please provide a valid margin ratio (should be in the form '0.02' for example.)")
+            print(usage_str)
             sys.exit(1)
     else:
         paths.append(arg)
@@ -102,10 +108,12 @@ while len(args) > 0:
 
 if not format_str or format_width == 0 or format_height == 0:
     print("Please provide a valid format.")
+    print(usage_str)
     sys.exit(1)
 
 if len(paths) == 0:
     print("Please provide a list of paths.")
+    print(usage_str)
     sys.exit(1)
 
 def process(path):
@@ -159,8 +167,8 @@ def process(path):
         new_image_path = f'{output_dir}/{image_name}_white_bg.{file_extension}'
         new_image.save(new_image_path, 
             quality=OUTPUT_QUALITY, 
-            icc_profile=image.info['icc_profile'],
-            exif=image.info['exif'],
+            icc_profile=image.info.get('icc_profile'),
+            exif=image.info.get('exif'),
             dpi=(300,300),
             optimize=True)
 
